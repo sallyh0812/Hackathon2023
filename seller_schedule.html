@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./style.css">
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArkO_JMFzYNN0lTUtQxXQH3truQvCFv5c&libraries=places&callback=initMap&language=zh-TW">
+    </script>
+	<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+	<script src="./firestore.js"></script>
+	<title>seller_schedule</title>
+</head>
+
+<!-- 背景圖片定義在body -->
+
+<body>
+	<div id="mySidenav" class="sidenav"></div>
+	<!-- 側邊收合欄-->
+	<script type="text/javascript">
+		/*打開側欄，修改側欄寬度，主體左跨度、背景透明度*/
+			function openNav() {
+				document.getElementById("mySidenav").style.width = "250px";
+				document.getElementById("main").style.marginLeft = "250px";
+				document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+			}
+			/*關閉側欄，恢復原始側欄寬度，主體左跨度、背景透明度*/
+			function closeNav() {
+				document.getElementById("mySidenav").style.width = "0";
+				document.getElementById("main").style.marginLeft= "0";
+				document.body.style.backgroundColor = "white";
+			}
+	</script>
+	<!-- content-box是白色半透明內容框 -->
+	<div id="main" class="content-box">
+		<span class=menu-button onclick="openNav()" >&#9776;</span>
+		<div class="left-content">
+			<!-- 地圖 -->
+			<div id="map">
+				<!-- map.js -->
+			</div>
+		</div>
+		<div class="right-content">
+			<div class="info-frame" id="info-frame">
+				<!-- seller_schedule.js -->
+			</div>
+			<div class="data-box-frame wrapper" id="data-box-frame">
+				<!-- seller_schedule.js -->
+			</div>
+			<!-- 放下方按紐或其他功能的功能列 -->
+			<div class="button-frame">
+				<a href="seller_index.html"><button class="submit-button" href="">新增排程</button></a>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script src="./map.js"></script>
+<script src="./seller_schedule.js"></script>
+<script src="sideNav.js"></script>
+
+</html>

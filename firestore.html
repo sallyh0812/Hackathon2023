@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-storage.js"></script>
+    <script src="./firestore.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>firestore_test</title>
+</head>
+
+<body>
+    <form id="imageForm" enctype="multipart/form-data">
+        <input type="file" id="imageFile" accept="image/*" multiple="multiple">
+        <button type="submit">Upload Image</button>
+    </form>
+    <div id="imageContainer"></div>
+</body>
+<script>
+    console.log(firebase.storage);
+    const imageForm = document.getElementById("imageForm");
+    const imageFileInput = document.getElementById("imageFile");
+
+    imageForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const storageRef = firebase.storage().ref();
+        for (let i = 0; i < imageFileInput.files.length; i++){
+            const file = imageFileInput.files[i];
+            if (file) {
+            const imagesRef = storageRef.child("images/" + file.name);
+
+            imagesRef.put(file).then((snapshot) => {
+                console.log("Image uploaded!");
+            });
+        } else {
+            console.log("No file selected.");
+        }
+        }
+        
+    });
+
+    // Reference to the Firebase Storage bucket where your images are stored
+    const storage = firebase.storage();
+
+    // Reference to the specific image you want to retrieve (replace 'images/image.jpg' with your image path)
+    // Reference to the Firebase Storage folder (change 'images/' to your folder path)
+    const folderRef = storage.ref('images/');
+    const imageContainer = document.getElementById("imageContainer");
+
+    // Function to list and display images from the folder
+    function listAndDisplayImages() {
+        folderRef.listAll()
+            .then(function (result) {
+                result.items.forEach(function (item) {
+                    item.getDownloadURL()
+                        .then(function (url) {
+                            const img = document.createElement('img');
+                            img.src = url;
+                            imageContainer.appendChild(img);
+                        })
+                        .catch(function (error) {
+                            console.error("Error getting image download URL:", error);
+                        });
+                });
+            })
+            .catch(function (error) {
+                console.error("Error listing items in the folder:", error);
+            });
+    }
+    listAndDisplayImages();
+
+</script>
+
+</html>

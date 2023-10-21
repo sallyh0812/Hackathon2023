@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+  <script src="./firestore.js"></script>
+  <link rel="stylesheet" href="./style.css">
+  <title>seller_edit</title>
+</head>
+
+<!-- 背景圖片定義在body -->
+
+<body>
+  <!-- 側邊收合欄-->
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="./seller_index.html">Home</a>
+    <a href="./seller_profile.html">My Profile</a>
+    <a href="./seller_schedule.html">My Schedule</a>
+    <a href="#">Log in</a>
+    <a href="#">Contact</a>
+  </div>
+
+  <!-- content-box是白色半透明內容框 -->
+  <form id="main" class="content-box edit-form" enctype="multipart/form-data">
+    <span class=menu-button onclick="openNav()">&#9776;</span>
+    <div class="signup-left-content">
+      <h2>基本資料修改</h2>
+      <div class="data-box-frame-a wrapper">
+        <div class="edit-input" id="edit-input">
+          <!-- <div class="input-box-a">
+            <label for="profile-picture" class="input-label">
+              頭貼：</label>
+            <input type="file" name="profilePicture" multiple="multiple">
+          </div>
+          <div class="input-box-a">
+            <label for="vendorName" class="input-label">
+              攤販名稱：</label>
+            <input name='vendorName' type="text" id="vendorName" class="input-text" required />
+          </div>
+          <div class="input-box-multiline">
+            <label for="vendorDescription" class="input-label">
+              關於攤販：</label>
+            <textarea name='vendorDescription' type="text" id="vendorDescription" class="input-text-multiline">
+						</textarea>
+          </div>
+          <div class="input-box-a">
+            <label for="vendorContact" class="input-label">
+              聯絡方式：</label>
+            <input name='vendorContact' type="text" id="vendorContact" class="input-text" required>
+          </div>
+          <div class="input-box-a">
+            <label for="menuPicture" class="input-label">
+              菜單：</label>
+            <input type="file" name="menuPicture[]" multiple="multiple">
+          </div>
+          <div class="input-box-a">
+            <label for="otherPicture" class="input-label">
+              其他照片：</label>
+            <input type="file" name="otherPicture" multiple="multiple">
+          </div> -->
+        </div>
+        <div class="button-frame">
+          <button class="submit-button">確認送出</button></a>
+        </div>
+      </div>
+    </div>
+  </form>
+  <script src="seller_edit.js"></script>
+  <script src="sideNav.js"></script>
+</body>
+
+
+</html>

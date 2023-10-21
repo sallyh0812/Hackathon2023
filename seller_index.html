@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./style.css">
+	<script async
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArkO_JMFzYNN0lTUtQxXQH3truQvCFv5c&libraries=places&callback=initMap&language=zh-TW">
+		</script>
+	<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+	<script src="./firestore.js"></script>
+	<title>seller_index</title>
+</head>
+
+<!-- 背景圖片定義在body -->
+
+<body>
+	<!-- 側邊收合欄-->
+	<div id="mySidenav" class="sidenav">
+		<!-- sideNav.js -->
+	</div>
+	<!-- content-box是白色半透明內容框 -->
+	<div id="main" class="content-box">
+		<!-- menu按鈕 -->
+		<span class=menu-button onclick="openNav()">&#9776;</span>
+		<!-- 地圖 -->
+		<div class="left-content">
+			<div id="map">
+			</div>
+		</div>
+		<div class="right-content">
+			<div class="info-frame" id="info-frame">
+				<!-- seller_index.js -->
+			</div>
+			<!-- 列出所有地點-->
+			<div class="data-box-frame wrapper" id="data-box-frame">
+				<!-- locationList.js-->
+			</div>
+			<!-- 放下方按紐或其他功能的功能列 -->
+			<div class="button-frame">
+				<a href="seller_schedule.html"><button class="submit-button">我的行程</button></a>
+			</div>
+		</div>
+	</div>
+	<script src="./map.js"></script>
+	<script src="./seller_index.js"></script>
+	<script src="./sideNav.js"></script>
+
+</body>
+
+</html>

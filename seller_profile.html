@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-storage.js"></script>
+	<script src="./firestore.js"></script>
+	<link rel="stylesheet" href="./style.css">
+	<title>seller_profile</title>
+</head>
+
+<!-- 背景圖片定義在body -->
+
+<body>
+	<!-- 側邊收合欄-->
+	<div id="mySidenav" class="sidenav"></div>
+	<!-- content-box是白色半透明內容框 -->
+	<div id="main" class="content-box">
+		<span class=menu-button onclick="openNav()">&#9776;</span>
+		<div class="profile-left-content">
+			<div class="profile-wrapper" id="profile-wrapper">
+				<!-- seller_profile.js -->
+			</div>
+		</div>
+		<div class="profile-right-content">
+			<div class="info-frame">
+				<h2>更多資訊</h2>
+			</div>
+			<div class="data-box-frame wrapper">
+				<div class="data-box" name="菜單">
+					<div class="content-wrapper">
+						<div class="content-title">
+							菜單
+						</div>
+					</div>
+					<div class="scroll-x-box" id="menu_pics">
+						<!-- seller_profile.js -->
+					</div>
+				</div>
+				<div class="data-box" name="照片">
+					<div class="content-wrapper">
+						<div class="content-title">
+							照片
+						</div>
+					</div>
+					<div class="scroll-x-box" id="others_pics"></div>
+				</div>
+			</div>
+			<!-- 放下方按紐或其他功能的功能列 -->
+			<div class="button-frame">
+				<a href="seller_edit.html"><button class="submit-button">編輯資料</button></a>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script src="./seller_profile.js"></script>
+<script src="./sideNav.js"></script>
+
+</html>

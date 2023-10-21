@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-storage.js"></script>
+  <script src="./firestore.js"></script>
+  <link rel="stylesheet" href="./style.css">
+  <title>Sign Up</title>
+</head>
+
+<!-- 背景圖片定義在body -->
+
+<body>
+  <!-- 側邊收合欄-->
+  <div id="mySidenav" class="sidenav"></div>
+
+  <!-- content-box是白色半透明內容框 -->
+  <form id="main" class="content-box signup-form" enctype="multipart/form-data">
+    <span class=menu-button onclick="openNav()">&#9776;</span>
+    <div class="signup-left-content">
+      <h2>基本資料填寫</h2>
+      <div class="data-box-frame-a wrapper">
+        <div class="login-input">
+          <div class="input-box-a">
+            <label for="profile-picture" class="input-label">
+              頭貼：</label>
+            <input type="file" name="profilePicture" multiple="multiple" id="profile_pic">
+          </div>
+          <div class="input-box-a">
+            <label for="vendorName" class="input-label">
+              攤販名稱：</label>
+            <input name='vendorName' type="text" id="vendorName" class="input-text" required />
+          </div>
+          <div class="input-box-multiline">
+            <label for="vendorDescription" class="input-label">
+              關於攤販：</label>
+            <textarea name='vendorDescription' type="text" id="vendorDescription" class="input-text-multiline">
+						</textarea>
+          </div>
+          <div class="input-box-a">
+            <label for="vendorContact" class="input-label">
+              聯絡方式：</label>
+            <input name='vendorContact' type="text" id="vendorContact" class="input-text">
+          </div>
+          <div class="input-box-a">
+            <label for="menuPicture" class="input-label">
+              菜單：</label>
+            <input type="file" name="menuPicture[]" multiple="multiple" id="menu_pics">
+          </div>
+          <div class="input-box-a">
+            <label for="otherPicture" class="input-label">
+              其他照片：</label>
+            <input type="file" name="otherPicture" multiple="multiple" id="others_pics">
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="signup-right-content">
+      <h2 class="login-title">
+        Create Account
+      </h2>
+      <div class="login-input">
+        <div class="input-box">
+          <label for="account" class="input-label">
+            <img src="user-icon1.png" class="logo"></label>
+          <input name='account' type="text" id="account" class="input-text" placeholder="請設定帳號" required />
+        </div>
+        <div class="input-box">
+          <label for="password" class="input-label">
+            <img src="password-icon.png" class="logo"></label>
+          <input name='password' type="password" id="password" class="input-text" placeholder="請設定密碼" required>
+        </div>
+        <div class="input-box">
+          <label for="passwordCheck" class="input-label">
+            <img src="password-check-icon.png" class="logo"></label>
+          <input name='passwordCheck' type="password" id="passwordCheck" class="input-text" placeholder="請確認密碼"
+            required>
+        </div>
+      </div>
+      <div class="login-input">
+        <div class="input-box">
+          <button class="login-button" type="submit">註冊</button>
+        </div>
+      </div>
+
+      <!-- 放下方按紐或其他功能的功能列 -->
+
+    </div>
+  </form>
+
+</body>
+<script src="seller_signup.js"></script>
+<script src="sideNav.js"></script>
+
+</html>

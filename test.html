@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>攤販地圖</title>
+  <!--載入Places Library-->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArkO_JMFzYNN0lTUtQxXQH3truQvCFv5c&libraries=places&callback=initMap&language=zh-TW">
+    </script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+
+<body>
+  <div>
+    <div id="map" style="width: 50%; height: 50vh;"></div>
+  </div>
+  <!-- 攤位座標
+        24.799567, 120.986429
+        24.798561, 120.978565
+        24.797147, 120.979138
+        24.788968, 121.002623
+    -->
+
+  <!-- JS程式碼-->
+  <script src="./test.js"></script>
+  <!-- <script>
+        let map;
+        let chosenDistrinct;
+        let selectedPosition;
+
+        function initMap() {
+            map = new google.maps.Map(
+                document.getElementById('map'),
+                //東區
+                {
+                    center: { lat: 24.792991945682573, lng: 120.99218222228808 },
+                    zoom: 14
+                }
+            )
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    chosenDistrinct = { lat: 24.798561, lng: 120.978565 };
+                    map.setCenter(chosenDistrinct);
+                    map.setZoom(16);
+                    const autocomplete = new google.map.places.Autocomplete(
+                        document.getElementById('search-input'),
+                        {
+                            types: ['restaurant']
+                        }
+                    );
+                    autocomplete.addListener('place_changed',
+                        function () {
+                            const place = autocomplete.getPlace();
+
+                            selectedPosition = {
+                                location: place.geometry.location,
+                                placeId: place.place_id,
+                                name: place.name,
+                                address: place.formatted_address,
+                                rating: place.rating,
+                            }
+                        }
+                    )
+                }
+            )
+            console.log(selectedPosition);
+
+        }
+
+    </script> -->
+  <div>
+    <form enctype="multipart/form-data">
+      <input type="text" id="username" name="username" required>
+      <input type="password" id="password" name="password" required>
+
+      <input type="file" id="profilePicture" name="profilePicture" accept="image/*" multiple>
+
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      const form = document.querySelector('form');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault(); //Prevent HTML submission
+
+        // const username = document.getElementById("username");
+        // const password = document.getElementById("password");
+        // const profilePicture = document.getElementById("profilePicture");
+
+        const formData = new FormData(form);
+        const urlEncoded = new URLSearchParams(formData).toString();
+
+        const boundary = '---------------boundary---------------';
+        // formData.append("username", username.value);
+        // formData.append("password", password.value);
+
+        // for (let i = 0; i < profilePicture.files.length; i++) {
+        //   formData.append("profilePicture", profilePicture.files[i]);
+        // }
+
+        //console.log(...formData);
+
+        fetch('http://localhost:3000/signup', {
+          method: "post",
+          body: formData,
+          // headers: {
+          //   'Content-type': "multipart/form-data; boundary=${boundary}"
+          // }
+        })
+          .then(response => {
+            console.log("success");
+          })
+          .catch(error => {
+            console.log("error");
+          });
+      })
+    </script>
+  </div>
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,512 @@
+* {
+    box-sizing: border-box;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+h3{
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+h4{
+    margin:5px
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 3px;
+    margin-top: 5px;
+}
+
+ul {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes openpage {
+    from {
+        transform: rotate(270deg);
+    }
+
+    to {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes closepage {
+    from {
+        transform: rotate(90deg);
+    }
+
+    to {
+        transform: rotate(270deg);
+    }
+}
+
+html {
+    overflow: hidden;
+    height: 92vb;
+}
+
+body {
+    margin: 20px;
+    background-image: url('./food-cover1.jpg');
+    /* 替換成您的背景圖片URL */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* 圖片置中 */
+    height: 100%;
+}
+
+/*side menu*/
+.menu-button{
+    font-size:30px;
+    cursor: pointer;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0; /*原始寬度*/
+    position: fixed;
+    /*z-index、top、left共同控制側欄的懸浮（上方1，下方-1）*/
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s; /*側欄延遲0.5s顯示*/
+    padding-top: 60px;
+}
+
+/*側邊欄標籤選擇器*/
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s; /*標籤延遲0.3s顯示*/
+}
+
+#main{
+    transition: margin-left .5s
+}
+
+#map{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/*側欄標籤和關閉按鈕光標的效果*/
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+/*側欄和關閉按鈕的位置選擇器*/
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.content-box{
+    background-color: rgba(255, 255, 255, 0.7);
+    /* 磨砂色半透明背景 */
+    padding: 30px 50px;
+    /* 上下各30px，左右各50px的距離 */
+    display: flex;
+    height: -webkit-fill-available;
+}
+
+.sign-up-form{
+    display: flex;
+    flex-direction: row;
+}
+
+.menu-content {
+    float: left;
+    /* 左側佔比4 */
+    padding: 20px;
+    /* 內容與外框的距離 */
+}
+
+.left-content {
+    flex: 4;
+    /* 左側佔比4 */
+    padding: 20px;
+    /* 內容與外框的距離 */
+}
+
+.right-content {
+    flex: 3;
+    /* 右側佔比3 */
+    padding: 20px 20px 20px 0; /*上右下左*/
+    /* 內容與外框的距離 */
+}
+
+.customer-right-content{
+    width: 50%;
+    padding: 20px 20px 20px 0; /*上右下左*/
+    /* 內容與外框的距離 */
+}
+
+.customer-left-content{
+    width: 50%;
+    padding: 20px;
+    /* 內容與外框的距離 */
+}
+
+.profile-left-content{
+    width: 40%;
+    /* 左側佔比 */
+    padding: 20px;
+    /* 內容與外框的距離 */
+}
+
+.profile-right-content{
+    width: 60%;
+    /* 右側佔比 */
+    padding: 20px 0px 20px 20px;
+    /* 內容與外框的距離 */
+}
+
+.main-profile{
+    flex: 4;
+    padding: 20px;
+    padding-bottom: 0;
+    text-align: center;
+    border-bottom: 1px solid;
+}
+
+.profile-detail{
+    flex: 6;
+    padding: 20px;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-info{
+    padding: 20px;
+}
+
+.profile-picture{
+    height: 50%;
+    max-height: 150px;
+    width: auto;
+    margin-bottom: 10px;
+    clip-path: circle(50%);
+}
+
+.profile-wrapper{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.intro-container {
+    background-color: #f5f5f5;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 8px;
+}
+
+.scroll-x-box{
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+}
+
+.scroll-x-box img{
+    height: 300px;
+    padding: 5px;
+}
+
+.data-box-frame, .data-box-frame-a {
+    overflow-y: scroll;
+    /* 可捲動的框架 */
+    height: 85%;
+    width: 100%;
+}
+
+.data-box-frame-a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+iframe {
+    border: none;
+    /* 無邊框 */
+    width: 100%;
+    height: 100%;
+}
+
+.contact-icon{
+    height: 35px;
+    margin: 5px;
+}
+
+/*登入頁面*/
+.login-left-content, .signup-left-content{
+    flex: 4;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-right-content, .signup-right-content{
+    border-left: 1px solid;
+    flex: 6;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-right-content{
+    flex:3;
+}
+
+.content-box-small {
+    background-color: rgba(255, 255, 255, 0.7);
+    /* 磨砂色半透明背景 */
+    padding: 30px 50px;
+    /* 上下各30px，左右各50px的距離 */
+    display: flex;
+    justify-content: space-between;
+    height: -webkit-fill-available;
+    width: max-content;
+    
+}
+
+.login-title{
+    font-size:xx-large;
+    margin: 30px;
+    text-align: center;
+
+}
+
+.input-box, .input-box-a, .input-box-multiline{
+    background-color: none;
+    padding: 0px; /*上右下左*/
+    margin: 30px;
+    display: flex;
+    align-items: center;
+    font-size: large;
+    width: 90%;
+}
+
+.input-box{
+    border-radius: 30px;
+    border: solid 1px;
+    height: 60px;
+}
+
+.input-box-a{
+    border: none;
+    border-bottom: solid 1px;
+    height: 60px;
+}
+
+.input-box-multiline{
+    border: none;
+    border-bottom: solid 1px;
+    height: 100px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.login-input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.input-text, .input-text-multiline{
+    background-color: rgba(255, 255, 255, 0);
+    border: 0;
+    padding: 0px 20px 0px 20px;
+    margin: 0px; /**/
+    height: 100%;
+    flex-grow: 1;
+    font-size: large;
+}
+
+.input-text-multiline{
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 100%;
+}
+
+.input-box :focus, .input-box-a :focus, .input-box-multiline :focus{
+    outline: none;
+}
+
+.input-label{
+    background-color: none;
+}
+
+.input-label img{
+    height: 50px;
+    padding-left: 20px;
+}
+
+.login-button{
+    padding: 0px; /*上右下左*/
+    border-radius: 30px;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    font-size: large;
+    background-color: cadetblue;
+    color: white;
+}
+
+/* ----------------------------------------*/
+
+/* 初始狀態的樣式 */
+.data-box {
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    /* 有稜角 */
+    transition: all 0.3s ease;
+    width: 97%;
+    /* 調整展開時的寬度 */
+    min-height: 50px;
+    /* 最小高度70px */
+    margin-bottom: 20px;
+    /* 與下方框架的距離 */
+    background-color: white;
+    /* 白色不透明背景 */
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.content-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.content-sub-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.collapse-button {
+    height: 25px;
+    width: 25px;
+    transform: rotate(90deg);
+    color: gray;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    animation: closepage 0.1s linear;
+}
+
+.content-container {
+    display: none;
+    /* 初始隱藏內容 */
+    transition: all 0.3s ease;
+    animation: fade 0.5s linear;
+}
+
+.content-box-a,
+.picture-container {
+    padding: 10px;
+    display: flex;
+}
+
+.picture-container img, .picture-container iframe{
+    width: 100%;
+}
+
+/* 展開狀態的樣式 */
+.data-box.expanded .collapse-button {
+    transform: rotate(270deg);
+    animation: openpage 0.1s linear;
+}
+
+.data-box.expanded {
+    width: 97%;
+    /* 調整展開時的寬度*/
+}
+
+.data-box.expanded .content-container{
+    display: block;
+    /* 顯示內容 */
+}
+
+.button-frame {
+    width: 100%;
+    height: 7%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.info-frame{
+    width: 100%;
+    height: 7%;
+    margin-bottom: 1%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.submit-button {
+    width: 100%;
+    height: 100%;
+}
