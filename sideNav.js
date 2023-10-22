@@ -2,7 +2,8 @@ const sideNav = document.getElementById("mySidenav")
 
 document.addEventListener("DOMContentLoaded", function () {
     sideNav.innerHTML +=
-        `<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        `<a class="button is-black" onclick="homepage()">Back</a>
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="seller_index.html">Home</a>
     ${!username ?
             "<a href='seller_login.html'>Log in</a>" :
