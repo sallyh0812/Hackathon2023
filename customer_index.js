@@ -19,6 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="content-title">
               <h2>${vendorData.name}</h2>
               <p>評分: ${vendorData.score}/5</p>
+              ${(0) ?
+            `<button class='like-button' like-vendor-id=${vendorId}>讚</button>`
+            : `<button class='unlike-button' unlike-vendor-id=${vendorId}>收回讚</button>`}
             </div>
             <div class="collapse-button">></div>
           </div>
@@ -79,12 +82,11 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
           </div>`
-
         console.log(vendorId);
 
       });
 
-      //地址和地點名稱
+      //塞地址和地點名稱
       db.collection("buyer").get()
         .then((querySnapshot) => {
           querySnapshot.forEach((placeDoc) => {
@@ -118,9 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
               console.log("Document does not exist.");
             }
           })
-        }
-
-        );
+        });
 
       //點擊展開
       const dataBoxes = document.querySelectorAll(".data-box");
@@ -154,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
       });
+
 
     })
     .catch((error) => {
@@ -208,60 +209,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-//make preservation after clicking preserve button
+
+//按讚店家
 document.addEventListener("click", function (event) {
   //console.log(event.target);
-  if (event.target && event.target.tagName == "BUTTON" && event.target.className.includes("preserve-button")) {
-    /* Get the input values within the button's parent element
-    const placeId = event.target.parentElement.querySelector('input[name="placeId"]').value;
-    const time = event.target.parentElement.querySelector('input[name="time"]').value;*/
+  if (event.target && event.target.tagName == "BUTTON" && event.target.className.includes("like-button")) {
 
     //get values from attribute
-    const placeId = event.target.getAttribute("data-place-id");
-    const time = event.target.getAttribute("data-time");
+    const vendorId = event.target.getAttribute("like-vendor-id");
+    const customerId = "sally";
 
-    /*console.log("Place ID:", placeId);
-    console.log("Time:", time);*/
-
-    db.collection("buyer").doc(placeId)
-      .get().then((placeDoc) => {
-        db.collection("seller").doc(username)
-          .get().then((sellerDoc) => {
-            if (placeDoc.exists && sellerDoc.exists) {
-              placeData = placeDoc.data();
-              pointNeeded = placeData.pointNeeded;
-
+    db.collection("seller").doc(vendorId)
+      .get().then((sellerDoc) => {
+        db.collection("customer").doc(customerId)
+          .get().then((customerDoc) => {
+            if (sellerDoc.exists && customerDoc.exists) {
               sellerData = sellerDoc.data();
-              sellerPoint = sellerData.point;
+              customerData = customerDoc.data();
 
-              console.log(sellerPoint - pointNeeded);
-              db.collection("buyer").doc(placeId)
-                .set({
-                  schedule: {
-                    [time]: username
-                  }
-                }, { merge: true });
-              db.collection("seller").doc(username)
-                .set({
-                  schedule: {
-                    [time]: placeId
-                  },
-                  point: (sellerPoint - pointNeeded)
-                }, { merge: true })
+              // Modify the data to remove the key-value pair you want to delete
+              sellerData.likes += 1;
+              customerData.likedVendor.push(vendorId);
 
+              // Update the document in Firestore with the modified data
+              db.collection("seller").doc(vendorId).update({ likes: sellerData.likes })
+              db.collection("customer").doc(customerId).update({ likedVendor: customerData.likedVendor })
                 .then(() => {
-                  alert("Preserve success");
+                  alert("Send like success");
                   location.reload();
                 })
                 .catch((error) => {
                   console.error("Error getting Firestore data: ", error);
-                  alert("Preservation failed, please try again\nError: ", error);
+                  alert("Send like failed, please try again\nError: ", error);
                 })
             } else {
               console.log("Document does not exist.");
             }
           })
-
       })
   }
 });

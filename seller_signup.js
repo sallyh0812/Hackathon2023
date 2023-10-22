@@ -70,6 +70,7 @@ signUpForm.addEventListener('submit', (e) => {
                         schedule: {},
                         point: 100,
                         score: 4,
+                        likes: 0,
                         contact: contactInfo
                     })
                         .then(() => {

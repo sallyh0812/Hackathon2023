@@ -128,45 +128,45 @@ document.addEventListener("DOMContentLoaded", function () {
                   });
                 })
               });
+
             })
             .catch((error) => {
               console.error("Error getting Firestore data: ", error);
             });
-        }
-
-        //地址
-        const geocoder = new google.maps.Geocoder();
-        db.collection("buyer").get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((placeDoc) => {
-              if (placeDoc.exists) {
-                placeData = placeDoc.data();
-                const placeId = placeDoc.id;
-                const lat = placeData.position.lat;
-                const lng = placeData.position.lng;
-                geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-                  if (status === 'OK') {
-                    if (results[0]) {
-                      const addressResult = results[0].formatted_address;
-                      const address_p = document.querySelectorAll(`#address_${placeId}`);
-                      //console.log(address_p.length)
-                      for (let i = 0; i < address_p.length; i++) {
-                        address_p[i].innerHTML += addressResult;
+          //地址
+          const geocoder = new google.maps.Geocoder();
+          db.collection("buyer").get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((placeDoc) => {
+                if (placeDoc.exists) {
+                  placeData = placeDoc.data();
+                  const placeId = placeDoc.id;
+                  const lat = placeData.position.lat;
+                  const lng = placeData.position.lng;
+                  geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                    if (status === 'OK') {
+                      if (results[0]) {
+                        const addressResult = results[0].formatted_address;
+                        const address_p = document.querySelectorAll(`#address_${placeId}`);
+                        //console.log(address_p.length)
+                        for (let i = 0; i < address_p.length; i++) {
+                          address_p[i].innerHTML += addressResult;
+                        }
+                      } else {
+                        console.log('No results found');
                       }
                     } else {
-                      console.log('No results found');
+                      console.log('Geocoder failed: ' + status);
                     }
-                  } else {
-                    console.log('Geocoder failed: ' + status);
-                  }
-                });
-              } else {
-                console.log("Document does not exist.");
-              }
-            })
-          }
+                  });
+                } else {
+                  console.log("Document does not exist.");
+                }
+              })
+            }
 
-          );
+            );
+        }
       });
   } else {
     infoFrame.innerHTML +=
