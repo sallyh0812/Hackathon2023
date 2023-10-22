@@ -84,7 +84,19 @@ body {
     height: 100%;
 }
 
-/*side menu*/
+#main{
+    transition: margin-left .5s
+}
+
+#map{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/*側邊攔*/
 .menu-button{
     font-size:30px;
     cursor: pointer;
@@ -112,18 +124,6 @@ body {
     color: #818181;
     display: block;
     transition: 0.3s; /*標籤延遲0.3s顯示*/
-}
-
-#main{
-    transition: margin-left .5s
-}
-
-#map{
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
 }
 
 /*側欄標籤和關閉按鈕光標的效果*/
@@ -404,6 +404,21 @@ iframe {
     font-size: large;
     background-color: cadetblue;
     color: white;
+}
+
+.big-button-frame{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50vw;
+    height: 100%;
+    padding: 10px;
+}
+
+.big-button{
+    margin: 20px;
+    width: 100%;
+    height: 80%;
 }
 
 /* ----------------------------------------*/

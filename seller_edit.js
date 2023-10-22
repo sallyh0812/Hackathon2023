@@ -4,17 +4,16 @@ console.log(username);
 const editForm = document.querySelector('.edit-form');
 
 document.addEventListener("DOMContentLoaded", function () {
-  //const vendorCookie = getCookie("vendorCookie");
-  const editInput = document.getElementById("edit-input");
+  if (username) {
+    const editInput = document.getElementById("edit-input");
+    const seller = db.collection("seller").doc(username);
 
-  const seller = db.collection("seller").doc(username);
-
-  seller.get()
-    .then((sellerDoc) => {
-      if (sellerDoc.exists) {
-        sellerData = sellerDoc.data();
-        editInput.innerHTML +=
-          `<div class="input-box-a">
+    seller.get()
+      .then((sellerDoc) => {
+        if (sellerDoc.exists) {
+          sellerData = sellerDoc.data();
+          editInput.innerHTML +=
+            `<div class="input-box-a">
                   <label for="profile-picture" class="input-label">
                     頭貼：</label>
                   <input type="file" name="profilePicture" multiple="multiple">
@@ -51,10 +50,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     其他照片：</label>
                   <input type="file" name="otherPicture" multiple="multiple">
                 </div>`
-      } else {
-        console.log('Document does not exist.');
-      }
-    });
+        } else {
+          console.log('Document does not exist.');
+        }
+      });
+  } else {
+    alert("Please log in first.");
+    window.location.href = "./seller_login.html";
+  }
+
 })
 
 editForm.addEventListener('submit', (e) => {

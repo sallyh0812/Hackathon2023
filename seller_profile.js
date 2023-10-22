@@ -6,15 +6,14 @@ const storageRef = storage.ref();
 
 document.addEventListener("DOMContentLoaded", function () {
     const profileWrapper = document.getElementById("profile-wrapper");
-
-    const seller = db.collection("seller").doc(username);
-
-    seller.get()
-        .then((sellerDoc) => {
-            if (sellerDoc.exists) {
-                sellerData = sellerDoc.data();
-                profileWrapper.innerHTML +=
-                    `<div class="main-profile">
+    if (username) {
+        const seller = db.collection("seller").doc(username);
+        seller.get()
+            .then((sellerDoc) => {
+                if (sellerDoc.exists) {
+                    sellerData = sellerDoc.data();
+                    profileWrapper.innerHTML +=
+                        `<div class="main-profile">
             <img class="profile-picture">
             <h2>${sellerData.name}</h2>
             <div class="content-box-a">
@@ -36,60 +35,65 @@ document.addEventListener("DOMContentLoaded", function () {
                     <img class="contact-icon" src="./web-icon.png"></a>
             </div>
         </div>`
-                // Get the image URL from Firebase Storage
-                const imageRef = storageRef.child(`${username}/profile_pic.jpg`); // Replace with the correct path to your image
-                const menuFolderRef = storage.ref(`${username}/menu/`);
-                const menuContainer = document.getElementById("menu_pics");
-                const othersFolderRef = storage.ref(`${username}/others/`);
-                const othersContainer = document.getElementById("others_pics");
+                    // Get the image URL from Firebase Storage
+                    const imageRef = storageRef.child(`${username}/profile_pic.jpg`); // Replace with the correct path to your image
+                    const menuFolderRef = storage.ref(`${username}/menu/`);
+                    const menuContainer = document.getElementById("menu_pics");
+                    const othersFolderRef = storage.ref(`${username}/others/`);
+                    const othersContainer = document.getElementById("others_pics");
 
-                imageRef.getDownloadURL()
-                    .then((url) => {
-                        // Set the 'src' attribute of the HTML 'img' element to the retrieved URL
-                        const imgElement = document.querySelector('.profile-picture');
-                        imgElement.src = url;
-                    })
-                    .catch((error) => {
-                        console.error('Error getting image URL:', error);
-                    });
-                menuFolderRef.listAll()
-                    .then(function (result) {
-                        result.items.forEach(function (item) {
-                            item.getDownloadURL()
-                                .then(function (url) {
-                                    const img = document.createElement('img');
-                                    img.src = url;
-                                    menuContainer.appendChild(img);
-                                })
-                                .catch(function (error) {
-                                    console.error("Error getting image download URL:", error);
-                                });
+                    imageRef.getDownloadURL()
+                        .then((url) => {
+                            // Set the 'src' attribute of the HTML 'img' element to the retrieved URL
+                            const imgElement = document.querySelector('.profile-picture');
+                            imgElement.src = url;
+                        })
+                        .catch((error) => {
+                            console.error('Error getting image URL:', error);
                         });
-                    })
-                    .catch(function (error) {
-                        console.error("Error listing items in the folder:", error);
-                    });
-                othersFolderRef.listAll()
-                    .then(function (result) {
-                        result.items.forEach(function (item) {
-                            item.getDownloadURL()
-                                .then(function (url) {
-                                    const img = document.createElement('img');
-                                    img.src = url;
-                                    othersContainer.appendChild(img);
-                                })
-                                .catch(function (error) {
-                                    console.error("Error getting image download URL:", error);
-                                });
+                    menuFolderRef.listAll()
+                        .then(function (result) {
+                            result.items.forEach(function (item) {
+                                item.getDownloadURL()
+                                    .then(function (url) {
+                                        const img = document.createElement('img');
+                                        img.src = url;
+                                        menuContainer.appendChild(img);
+                                    })
+                                    .catch(function (error) {
+                                        console.error("Error getting image download URL:", error);
+                                    });
+                            });
+                        })
+                        .catch(function (error) {
+                            console.error("Error listing items in the folder:", error);
                         });
-                    })
-                    .catch(function (error) {
-                        console.error("Error listing items in the folder:", error);
-                    });
+                    othersFolderRef.listAll()
+                        .then(function (result) {
+                            result.items.forEach(function (item) {
+                                item.getDownloadURL()
+                                    .then(function (url) {
+                                        const img = document.createElement('img');
+                                        img.src = url;
+                                        othersContainer.appendChild(img);
+                                    })
+                                    .catch(function (error) {
+                                        console.error("Error getting image download URL:", error);
+                                    });
+                            });
+                        })
+                        .catch(function (error) {
+                            console.error("Error listing items in the folder:", error);
+                        });
 
-            } else {
-                console.log('Document does not exist.');
-            }
-        });
+                } else {
+                    console.log('Document does not exist.');
+                }
+            });
+    }else{
+        alert("Please log in first.");
+        window.location.href = "./seller_login.html";
+    }
+
 });
 

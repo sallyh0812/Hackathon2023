@@ -6,21 +6,20 @@ document.addEventListener("DOMContentLoaded", function () {
     //const vendorCookie = getCookie("vendorCookie");
     const dataBoxFrame = document.getElementById("data-box-frame");
     const infoFrame = document.getElementById("info-frame");
-
-    const seller = db.collection("seller").doc(username);
-
-    seller.get()
-        .then((doc) => {
-            if (doc.exists) {
-                sellerData = doc.data();
-                sortedKeys = Object.keys(sellerData.schedule).sort(); //get map keys
-                //console.log(sortedKeys.length);
-                infoFrame.innerHTML +=
-                    `<p>${sellerData.name}'s schedule</p>`
-                for (let i = 0; i < sortedKeys.length; i++) {
-                    const placeId = sellerData.schedule[sortedKeys[i]]
-                    dataBoxFrame.innerHTML +=
-                        `<div class="data-box" id="marker_${sellerData.schedule[sortedKeys[i]]}" position_tags="${sellerData.schedule[sortedKeys[i]]}">
+    if (username) {
+        const seller = db.collection("seller").doc(username);
+        seller.get()
+            .then((doc) => {
+                if (doc.exists) {
+                    sellerData = doc.data();
+                    sortedKeys = Object.keys(sellerData.schedule).sort(); //get map keys
+                    //console.log(sortedKeys.length);
+                    infoFrame.innerHTML +=
+                        `<p>${sellerData.name}'s schedule</p>`
+                    for (let i = 0; i < sortedKeys.length; i++) {
+                        const placeId = sellerData.schedule[sortedKeys[i]]
+                        dataBoxFrame.innerHTML +=
+                            `<div class="data-box" id="marker_${sellerData.schedule[sortedKeys[i]]}" position_tags="${sellerData.schedule[sortedKeys[i]]}">
                 <div class="content-wrapper">
                     <div class="content-title">
                         時段${i + 1}
@@ -51,69 +50,73 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>
                         </div>`
-                }
-                db.collection("buyer").get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((placeDoc) => {
-                            if (placeDoc.exists) {
-                                placeData = placeDoc.data();
-                                const placeId = placeDoc.id;
-                                const lat = placeData.position.lat;
-                                const lng = placeData.position.lng;
-                                const geocoder = new google.maps.Geocoder();
-                                geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-                                    if (status === 'OK') {
-                                        if (results[0]) {
-                                            const addressResult = results[0].formatted_address;
-                                            const address_p = document.querySelectorAll(`#address_${placeId}`);
-                                            //console.log(address_p.length)
-                                            for (let i = 0; i < address_p.length; i++) {
-                                                address_p[i].innerHTML += addressResult;
+                    }
+                    db.collection("buyer").get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach((placeDoc) => {
+                                if (placeDoc.exists) {
+                                    placeData = placeDoc.data();
+                                    const placeId = placeDoc.id;
+                                    const lat = placeData.position.lat;
+                                    const lng = placeData.position.lng;
+                                    const geocoder = new google.maps.Geocoder();
+                                    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                                        if (status === 'OK') {
+                                            if (results[0]) {
+                                                const addressResult = results[0].formatted_address;
+                                                const address_p = document.querySelectorAll(`#address_${placeId}`);
+                                                //console.log(address_p.length)
+                                                for (let i = 0; i < address_p.length; i++) {
+                                                    address_p[i].innerHTML += addressResult;
+                                                }
+                                            } else {
+                                                console.log('No results found');
                                             }
                                         } else {
-                                            console.log('No results found');
+                                            console.log('Geocoder failed: ' + status);
                                         }
-                                    } else {
-                                        console.log('Geocoder failed: ' + status);
+                                    });
+                                    const location_p = document.querySelectorAll(`#location_${placeId}`)
+                                    for (let i = 0; i < location_p.length; i++) {
+                                        location_p[i].innerHTML += placeData.locationName;
                                     }
-                                });
-                                const location_p = document.querySelectorAll(`#location_${placeId}`)
-                                for (let i = 0; i < location_p.length; i++) {
-                                    location_p[i].innerHTML += placeData.locationName;
+                                } else {
+                                    console.log("Document does not exist.");
                                 }
-                            } else {
-                                console.log("Document does not exist.");
-                            }
-                        })
-                    }
-
-                    );
-                //點擊展開並顯示marker窗口
-                const dataBoxes = document.querySelectorAll(".data-box");
-                dataBoxes.forEach((dataBox) => {
-                    const contentWrapper = dataBox.querySelector(".content-wrapper");
-
-                    contentWrapper.addEventListener("click", () => {
-                        dataBox.classList.toggle("expanded");
-                        const placeId = dataBox.getAttribute('position_tags');
-                        const marker = findMarkerByPlaceId(placeId);
-                        console.log(marker);
-                        // 顯示標記（marker）
-                        if (marker || infoWindow) {
-                            // 關閉之前打開的信息窗口
-                            markers.forEach(() => {
-                                infoWindow.close();
-                            });
-                            // 打開當前標記的信息窗口
-                            infoWindow.setContent(`${marker.title}`);
-                            infoWindow.open(map, marker);
+                            })
                         }
+
+                        );
+                    //點擊展開並顯示marker窗口
+                    const dataBoxes = document.querySelectorAll(".data-box");
+                    dataBoxes.forEach((dataBox) => {
+                        const contentWrapper = dataBox.querySelector(".content-wrapper");
+
+                        contentWrapper.addEventListener("click", () => {
+                            dataBox.classList.toggle("expanded");
+                            const placeId = dataBox.getAttribute('position_tags');
+                            const marker = findMarkerByPlaceId(placeId);
+                            console.log(marker);
+                            // 顯示標記（marker）
+                            if (marker || infoWindow) {
+                                // 關閉之前打開的信息窗口
+                                markers.forEach(() => {
+                                    infoWindow.close();
+                                });
+                                // 打開當前標記的信息窗口
+                                infoWindow.setContent(`${marker.title}`);
+                                infoWindow.open(map, marker);
+                            }
+                        });
                     });
-                });
-            } else {
-                console.log('Document does not exist.');
-            }
-        });
+                } else {
+                    console.log('Document does not exist.');
+                }
+            });
+    } else {
+        alert("Please log in first.");
+        window.location.href = "./seller_login.html";
+    }
 })
 
 //點擊按鈕刪除預約行程

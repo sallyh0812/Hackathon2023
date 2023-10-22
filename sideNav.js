@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     sideNav.innerHTML +=
         `<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="seller_index.html">Home</a>
-    ${username == 'null' ?
+    ${!username ?
             "<a href='seller_login.html'>Log in</a>" :
             "<a href='seller_profile.html'>My Profile</a><a href='seller_schedule.html'>My Schedule</a><a onclick='logout()'>Log out</a>"
         }
@@ -25,7 +25,7 @@ function closeNav() {
 }
 
 function logout() {
-    localStorage.setItem("vendorCookie", null);
+    localStorage.clear();
     alert("Log out success.");
-    window.location.href = "./seller_index.html";
+    window.location.href = "./seller_login.html";
 }
