@@ -18,8 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `<p>哈囉，${sellerData.name}</p>
                 <p>剩餘點數：${sellerData.point}</p>`;
 
-          db.collection("buyer") // Firestore collection name
-            .get()
+          db.collection("buyer").get()
             .then((querySnapshot) => {
               //every document loop
               querySnapshot.forEach((doc) => {
@@ -128,44 +127,42 @@ document.addEventListener("DOMContentLoaded", function () {
                   });
                 })
               });
+              //地址
+              const geocoder = new google.maps.Geocoder();
+              db.collection("buyer").get()
+                .then((querySnapshot) => {
+                  querySnapshot.forEach((placeDoc) => {
+                    if (placeDoc.exists) {
+                      placeData = placeDoc.data();
+                      const placeId = placeDoc.id;
+                      const lat = placeData.position.lat;
+                      const lng = placeData.position.lng;
+                      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                        if (status === 'OK') {
+                          if (results[0]) {
+                            const addressResult = results[0].formatted_address;
+                            const address_p = document.querySelectorAll(`#address_${placeId}`);
+                            //console.log(address_p.length)
+                            for (let i = 0; i < address_p.length; i++) {
+                              address_p[i].innerHTML += addressResult;
+                            }
+                          } else {
+                            console.log('No results found');
+                          }
+                        } else {
+                          console.log('Geocoder failed: ' + status);
+                        }
+                      });
+                    } else {
+                      console.log("Document does not exist.");
+                    }
+                  })
+                });
 
             })
             .catch((error) => {
               console.error("Error getting Firestore data: ", error);
             });
-          //地址
-          const geocoder = new google.maps.Geocoder();
-          db.collection("buyer").get()
-            .then((querySnapshot) => {
-              querySnapshot.forEach((placeDoc) => {
-                if (placeDoc.exists) {
-                  placeData = placeDoc.data();
-                  const placeId = placeDoc.id;
-                  const lat = placeData.position.lat;
-                  const lng = placeData.position.lng;
-                  geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-                    if (status === 'OK') {
-                      if (results[0]) {
-                        const addressResult = results[0].formatted_address;
-                        const address_p = document.querySelectorAll(`#address_${placeId}`);
-                        //console.log(address_p.length)
-                        for (let i = 0; i < address_p.length; i++) {
-                          address_p[i].innerHTML += addressResult;
-                        }
-                      } else {
-                        console.log('No results found');
-                      }
-                    } else {
-                      console.log('Geocoder failed: ' + status);
-                    }
-                  });
-                } else {
-                  console.log("Document does not exist.");
-                }
-              })
-            }
-
-            );
         }
       });
   } else {
