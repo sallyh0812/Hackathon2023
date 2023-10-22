@@ -1,3 +1,5 @@
+const username = localStorage.getItem("vendorCookie");
+console.log(username);
 const logInForm = document.querySelector('.login-form');
 
 function setCookie(name, value, path) {
@@ -42,7 +44,7 @@ function checkCookie() {
 
 logInForm.addEventListener('submit', (e) => {
     e.preventDefault(); //Prevent HTML submission
-    const username = document.getElementById("username").value;
+    const account = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
     db.collection("seller")
@@ -52,11 +54,11 @@ logInForm.addEventListener('submit', (e) => {
             querySnapShot.forEach((doc) => {
                 id = doc.id;
                 vendor = doc.data();
-                if (username == id && password == vendor.password) {
+                if (account == id && password == vendor.password) {
                     check = true;
                     // setCookie("vendorCookie", username, "./seller_index.html");
                     // console.log(document.Cookie);
-                    localStorage.setItem("vendorCookie", `${username}`);
+                    localStorage.setItem("vendorCookie", `${account}`);
                     alert(`Log in success\nWelcome ${vendor.name}`);
                     window.location.href = "./seller_index.html";
                 }
