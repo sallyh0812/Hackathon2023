@@ -2,26 +2,31 @@ const dataBoxFrame = document.getElementById("data-box-frame");
 const infoFrame = document.getElementById("info-frame");
 const buyerCollection = db.collection("buyer");
 const storage = firebase.storage();
+const customerId = 'sally';
 
 // run the function after DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function () {
   //const vendorCookie = getCookie("vendorCookie");
-
-  db.collection("seller").get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((vendorDoc) => {
-        const vendorData = vendorDoc.data();
-        const vendorId = vendorDoc.id;
-        sortedKeys = Object.keys(vendorData.schedule).sort();
-        dataBoxFrame.innerHTML +=
-          `<div class="data-box">
+  db.collection("customer").doc(customerId).get()
+    .then((customerDoc) => {
+      if (customerDoc.exists) {
+        const customerData = customerDoc.data();
+        db.collection("seller").get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((vendorDoc) => {
+              const vendorData = vendorDoc.data();
+              const vendorId = vendorDoc.id;
+              var isVendorLiked = customerData.likedVendor.includes(vendorId);
+              sortedKeys = Object.keys(vendorData.schedule).sort();
+              dataBoxFrame.innerHTML +=
+                `<div class="data-box">
           <div class="content-wrapper">
             <div class="content-title">
               <h2>${vendorData.name}</h2>
               <p>評分: ${vendorData.score}/5</p>
-              ${(0) ?
-            `<button class='like-button' like-vendor-id=${vendorId}>讚</button>`
-            : `<button class='unlike-button' unlike-vendor-id=${vendorId}>收回讚</button>`}
+              ${(isVendorLiked) ?
+                `<button class='unlike-button' unlike-vendor-id=${vendorId}>收回讚</button>`
+                  : `<button class='like-button' like-vendor-id=${vendorId}>讚</button>`}
             </div>
             <div class="collapse-button">></div>
           </div>
@@ -48,12 +53,12 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             </div>
             </div>`
-        const contentContainer = document.getElementById(`vendor_${vendorId}`)
-        for (let i = 0; i < sortedKeys.length; i++) {
-          const placeId = vendorData.schedule[sortedKeys[i]];
+              const contentContainer = document.getElementById(`vendor_${vendorId}`)
+              for (let i = 0; i < sortedKeys.length; i++) {
+                const placeId = vendorData.schedule[sortedKeys[i]];
 
-          contentContainer.innerHTML +=
-            `<div class="intro-container" id="marker_${placeId}" position_tags='${placeId}'>
+                contentContainer.innerHTML +=
+                  `<div class="intro-container" id="marker_${placeId}" position_tags='${placeId}'>
               <div class="content-wrapper">
                 <div class="content-title">
                   <h3>時段${i + 1}</h3>
@@ -69,9 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
                   </ul>
                   </p>
                 </div>`
-        }
-        contentContainer.innerHTML +=
-          `<div class="intro-container" name="其他">
+              }
+              contentContainer.innerHTML +=
+                `<div class="intro-container" name="其他">
             <div class="content-wrapper">
               <div class="content-title">
                 <h3>其他</h3>
@@ -82,131 +87,132 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
           </div>`
-        console.log(vendorId);
+              console.log(vendorId);
 
-      });
+            });
 
-      //塞地址和地點名稱
-      db.collection("buyer").get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((placeDoc) => {
-            if (placeDoc.exists) {
-              placeData = placeDoc.data();
-              const placeId = placeDoc.id;
-              const lat = placeData.position.lat;
-              const lng = placeData.position.lng;
-              const geocoder = new google.maps.Geocoder();
-              geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-                if (status === 'OK') {
-                  if (results[0]) {
-                    const addressResult = results[0].formatted_address;
-                    const address_p = document.querySelectorAll(`#address_${placeId}`);
-                    //console.log(address_p.length)
-                    for (let i = 0; i < address_p.length; i++) {
-                      address_p[i].innerHTML += addressResult;
+            //塞地址和地點名稱
+            db.collection("buyer").get()
+              .then((querySnapshot) => {
+                querySnapshot.forEach((placeDoc) => {
+                  if (placeDoc.exists) {
+                    placeData = placeDoc.data();
+                    const placeId = placeDoc.id;
+                    const lat = placeData.position.lat;
+                    const lng = placeData.position.lng;
+                    const geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                      if (status === 'OK') {
+                        if (results[0]) {
+                          const addressResult = results[0].formatted_address;
+                          const address_p = document.querySelectorAll(`#address_${placeId}`);
+                          //console.log(address_p.length)
+                          for (let i = 0; i < address_p.length; i++) {
+                            address_p[i].innerHTML += addressResult;
+                          }
+                        } else {
+                          console.log('No results found');
+                        }
+                      } else {
+                        console.log('Geocoder failed: ' + status);
+                      }
+                    });
+                    const location_p = document.querySelectorAll(`#location_${placeId}`)
+                    for (let i = 0; i < location_p.length; i++) {
+                      location_p[i].innerHTML += placeData.locationName;
                     }
                   } else {
-                    console.log('No results found');
+                    console.log("Document does not exist.");
                   }
-                } else {
-                  console.log('Geocoder failed: ' + status);
+                })
+              });
+
+            //點擊展開
+            const dataBoxes = document.querySelectorAll(".data-box");
+            dataBoxes.forEach((dataBox) => {
+              const contentWrapper = dataBox.querySelector(".content-wrapper");
+
+              contentWrapper.addEventListener("click", () => {
+                dataBox.classList.toggle("expanded");
+              });
+            });
+
+            //點擊展開+marker顯示info
+            const introContainers = document.querySelectorAll(".intro-container");
+            introContainers.forEach((introContainer) => {
+              const contentWrapper = introContainer.querySelector(".content-wrapper");
+
+              contentWrapper.addEventListener("click", () => {
+                const placeId = introContainer.getAttribute('position_tags');
+                // 根據place_id查找相對應的標記（marker）
+                const marker = findMarkerByPlaceId(placeId);
+                console.log(marker);
+                // 顯示標記（marker）
+                if (marker || infoWindow) {
+                  // 關閉之前打開的信息窗口
+                  markers.forEach(() => {
+                    infoWindow.close();
+                  });
+                  // 打開當前標記的信息窗口
+                  infoWindow.setContent(`${marker.title}`);
+                  infoWindow.open(map, marker);
                 }
               });
-              const location_p = document.querySelectorAll(`#location_${placeId}`)
-              for (let i = 0; i < location_p.length; i++) {
-                location_p[i].innerHTML += placeData.locationName;
-              }
-            } else {
-              console.log("Document does not exist.");
-            }
-          })
-        });
-
-      //點擊展開
-      const dataBoxes = document.querySelectorAll(".data-box");
-      dataBoxes.forEach((dataBox) => {
-        const contentWrapper = dataBox.querySelector(".content-wrapper");
-
-        contentWrapper.addEventListener("click", () => {
-          dataBox.classList.toggle("expanded");
-        });
-      });
-
-      //點擊展開+marker顯示info
-      const introContainers = document.querySelectorAll(".intro-container");
-      introContainers.forEach((introContainer) => {
-        const contentWrapper = introContainer.querySelector(".content-wrapper");
-
-        contentWrapper.addEventListener("click", () => {
-          const placeId = introContainer.getAttribute('position_tags');
-          // 根據place_id查找相對應的標記（marker）
-          const marker = findMarkerByPlaceId(placeId);
-          console.log(marker);
-          // 顯示標記（marker）
-          if (marker || infoWindow) {
-            // 關閉之前打開的信息窗口
-            markers.forEach(() => {
-              infoWindow.close();
             });
-            // 打開當前標記的信息窗口
-            infoWindow.setContent(`${marker.title}`);
-            infoWindow.open(map, marker);
-          }
-        });
-      });
+          })
+          .catch((error) => {
+            console.error("Error getting Firestore data: ", error);
+          });
 
+        //把相片塞進去  
+        db.collection("seller").get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((vendorDoc) => {
+              const vendorId = vendorDoc.id;
+              const menuFolderRef = storage.ref(`${vendorId}/menu/`);
+              const menuContainer = document.getElementById(`menu_pics_${vendorId}`);
+              const othersFolderRef = storage.ref(`${vendorId}/others/`);
+              const othersContainer = document.getElementById(`others_pics_${vendorId}`);
 
+              menuFolderRef.listAll()
+                .then(function (result) {
+                  result.items.forEach(function (item) {
+                    item.getDownloadURL()
+                      .then(function (url) {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        menuContainer.appendChild(img);
+                      })
+                      .catch(function (error) {
+                        console.error("Error getting image download URL:", error);
+                      });
+                  });
+                })
+                .catch(function (error) {
+                  console.error("Error listing items in the folder:", error);
+                });
+              othersFolderRef.listAll()
+                .then(function (result) {
+                  result.items.forEach(function (item) {
+                    item.getDownloadURL()
+                      .then(function (url) {
+                        const img = document.createElement('img');
+                        img.src = url;
+                        othersContainer.appendChild(img);
+                      })
+                      .catch(function (error) {
+                        console.error("Error getting image download URL:", error);
+                      });
+                  });
+                })
+                .catch(function (error) {
+                  console.error("Error listing items in the folder:", error);
+                });
+            });
+          });
+      }
     })
-    .catch((error) => {
-      console.error("Error getting Firestore data: ", error);
-    });
 
-  //把相片塞進去  
-  db.collection("seller").get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((vendorDoc) => {
-        const vendorId = vendorDoc.id;
-        const menuFolderRef = storage.ref(`${vendorId}/menu/`);
-        const menuContainer = document.getElementById(`menu_pics_${vendorId}`);
-        const othersFolderRef = storage.ref(`${vendorId}/others/`);
-        const othersContainer = document.getElementById(`others_pics_${vendorId}`);
-
-        menuFolderRef.listAll()
-          .then(function (result) {
-            result.items.forEach(function (item) {
-              item.getDownloadURL()
-                .then(function (url) {
-                  const img = document.createElement('img');
-                  img.src = url;
-                  menuContainer.appendChild(img);
-                })
-                .catch(function (error) {
-                  console.error("Error getting image download URL:", error);
-                });
-            });
-          })
-          .catch(function (error) {
-            console.error("Error listing items in the folder:", error);
-          });
-        othersFolderRef.listAll()
-          .then(function (result) {
-            result.items.forEach(function (item) {
-              item.getDownloadURL()
-                .then(function (url) {
-                  const img = document.createElement('img');
-                  img.src = url;
-                  othersContainer.appendChild(img);
-                })
-                .catch(function (error) {
-                  console.error("Error getting image download URL:", error);
-                });
-            });
-          })
-          .catch(function (error) {
-            console.error("Error listing items in the folder:", error);
-          });
-      });
-    });
 
 });
 
@@ -241,6 +247,50 @@ document.addEventListener("click", function (event) {
                 .catch((error) => {
                   console.error("Error getting Firestore data: ", error);
                   alert("Send like failed, please try again\nError: ", error);
+                })
+            } else {
+              console.log("Document does not exist.");
+            }
+          })
+      })
+  }
+});
+
+//收回讚
+document.addEventListener("click", function (event) {
+  //console.log(event.target);
+  if (event.target && event.target.tagName == "BUTTON" && event.target.className.includes("unlike-button")) {
+
+    //get values from attribute
+    const vendorId = event.target.getAttribute("unlike-vendor-id");
+    const customerId = "sally";
+
+    db.collection("seller").doc(vendorId)
+      .get().then((sellerDoc) => {
+        db.collection("customer").doc(customerId)
+          .get().then((customerDoc) => {
+            if (sellerDoc.exists && customerDoc.exists) {
+              sellerData = sellerDoc.data();
+              customerData = customerDoc.data();
+
+              // Modify the data to remove the key-value pair you want to delete
+              sellerData.likes -= 1;
+
+              deleteIndex = customerData.likedVendor.indexOf(vendorId);
+              if (deleteIndex !== -1) {
+                customerData.likedVendor.splice(deleteIndex, 1);
+              }
+
+              // Update the document in Firestore with the modified data
+              db.collection("seller").doc(vendorId).update({ likes: sellerData.likes })
+              db.collection("customer").doc(customerId).update({ likedVendor: customerData.likedVendor })
+                .then(() => {
+                  alert("Unsend like success");
+                  location.reload();
+                })
+                .catch((error) => {
+                  console.error("Error getting Firestore data: ", error);
+                  alert("Unsend like failed, please try again\nError: ", error);
                 })
             } else {
               console.log("Document does not exist.");
