@@ -30,3 +30,8 @@ function logout() {
     alert("Log out success.");
     window.location.href = "./seller_login.html";
 }
+
+function homepage() {
+    localStorage.clear();
+    window.location.href = 'https://louischang0126.github.io';
+}
